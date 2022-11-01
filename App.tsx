@@ -1,24 +1,16 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { theme } from './src/styles/theme';
 
-import { NativeBaseProvider } from "native-base";
+import { StatusBar } from "expo-status-bar";
+
+import { NativeBaseProvider, Center, Text } from "native-base";
 
 export default function App() {
   return (
-    <NativeBaseProvider>
-      <View style={styles.container}>
-        <Text>Tuddu Seller Center</Text>
+    <NativeBaseProvider theme={theme}>
+      <Center flex={1} bgColor="gray.900">
+        <Text color="yellow.500" fontSize={24} >Tuddu Seller Center</Text>
         <StatusBar style="auto" />
-      </View>
+      </Center>
     </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
