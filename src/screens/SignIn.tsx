@@ -1,13 +1,12 @@
 import { Center, Text } from "native-base";
 import React from "react";
-import { StatusBar } from "react-native";
 
-function SignIn(props) {
+import Logo from '../assets/logo.svg'
+
+function SignIn() {
   return (
     <Center flex={1} bgColor="gray.900">
-      <Text color="yellow.500" fontSize={24}>
-        Tuddu Seller Center
-      </Text>
+      <Logo width={212} height={40} />
       <Text color="yellow.500" fontSize={24}>
         SignIn
       </Text>
