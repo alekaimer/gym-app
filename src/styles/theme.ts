@@ -24,7 +24,7 @@ export const theme = extendTheme({
   },
 
   fonts: {
-    heading: "Roboto700Bold",
+    heading: "Roboto_700Bold",
     body: "Roboto_400Regular",
     medium: "Roboto_500Medium",
   },
