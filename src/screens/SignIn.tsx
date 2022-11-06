@@ -1,8 +1,8 @@
 import { Center, Text, Icon } from "native-base";
 import React from "react";
 
-import Logo from "../assets/logo.svg";
-import { Button } from "../components/Button";
+import Logo from "@assets/logo.svg";
+import { Button } from "@components/Button";
 import { Fontisto } from "@expo/vector-icons";
 
 function SignIn() {
