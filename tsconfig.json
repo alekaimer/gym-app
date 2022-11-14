@@ -37,6 +37,9 @@
       "@styles/*": [
         "./src/styles/*"
       ],
+      "@templates/*": [
+        "./src/templates/*"
+      ],
     }
   }
 }
