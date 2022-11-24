@@ -1,12 +1,15 @@
-import Header from "@components/Header";
-import { Box } from "native-base";
 import React from "react";
+import { Box } from "native-base";
+import Header from "@components/Header";
 
 function WithHeaderTemplate({ children }: { children: React.ReactNode }) {
+
   return (
-    <Box flex="1" bgColor="primary.500" p={0} safeAreaTop>
+    <Box flex="1" bgColor="gray.400" p={0} safeAreaTop>
       <Header />
-      <Box flex="1" bgColor="white" p={4}>{children}</Box>
+      <Box flex="1" bgColor="white" p={0}>
+        {children}
+      </Box>
     </Box>
   );
 }
