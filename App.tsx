@@ -1,3 +1,4 @@
+import React from "react";
 import {
   useFonts,
   Roboto_400Regular,
@@ -5,11 +6,11 @@ import {
   Roboto_700Bold,
 } from "@expo-google-fonts/roboto";
 import { theme } from "@styles/theme";
-import { NativeBaseProvider, StatusBar } from "native-base";
+import { NativeBaseProvider } from "native-base";
 
 import Loading from "@components/Loading";
-import SignIn from "@screens/SignIn";
 import { AuthContextProvider } from "@contexts/AuthContext";
+import { MainRoutes } from "@routes/index";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -21,12 +22,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <AuthContextProvider>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent
-        />
-        {!fontsLoaded ? <Loading /> : <SignIn />}
+        {!fontsLoaded ? <Loading /> : <MainRoutes />}
       </AuthContextProvider>
     </NativeBaseProvider>
   );
