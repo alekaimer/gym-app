@@ -7,7 +7,7 @@ import { Menu } from "@screens/Menu";
 import { Icon } from "native-base";
 import { ComponentsExibition } from "@screens/ComponentsExibition";
 
-export type BottomTabParams = {
+export type HomeRoutesParams = {
   Home: undefined;
   Perfil: undefined;
   Menu: undefined;
@@ -19,7 +19,7 @@ interface NavigationTabProps {
 }
 
 const { Navigator, Screen, Group } =
-  createBottomTabNavigator<BottomTabParams>();
+  createBottomTabNavigator<HomeRoutesParams>();
 
 export function HomeRoutes() {
   return (

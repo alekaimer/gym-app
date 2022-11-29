@@ -2,10 +2,11 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeRoutes } from "./home.routes";
-import { Menu } from "@screens/Menu";
+import { SignInRoutes } from "./signIn.routes";
 
-export type BottomTabParams = {
+export type MainRoutesParams = {
   HomeRoutes: undefined;
+  SignInRoutes: undefined;
 };
 
 export function MainRoutes() {
@@ -22,8 +23,8 @@ export function MainRoutes() {
 
         }}
       >
+        <Screen name="SignInRoutes" component={SignInRoutes} />
         <Screen name="HomeRoutes" component={HomeRoutes} />
-        <Screen name="HomeMenuRoutes" component={Menu} />
       </Navigator>
     </NavigationContainer>
   );
