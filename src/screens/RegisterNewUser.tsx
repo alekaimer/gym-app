@@ -5,9 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 export function RegisterNewUser() {
   const { navigate } = useNavigation();
   return (
-      <Center flex="1">
-        <Heading>RegisterNewUser</Heading>
-        <Button onPress={() => navigate("SignIn")}>SignIn Screen</Button>
-      </Center>
+    <Center flex="1">
+      <Heading>RegisterNewUser Screen</Heading>
+      <Button variant="link" onPress={() => navigate("SignIn")}>
+        SignIn Screen
+      </Button>
+    </Center>
   );
 }

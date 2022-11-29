@@ -18,14 +18,15 @@ export function StackTemplate({ title, children }: StackTemplateProps) {
         <Flex
           direction="row"
           py={1}
-          bgColor="gray.400"
+          borderBottomColor="gray.100"
+          borderBottomWidth={2}
           _text={{
             color: "coolGray.800",
           }}
         >
           <Button
             variant="link"
-            p={4}
+            p={2}
             pl={6}
             _text={{
               color: "white",

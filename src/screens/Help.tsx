@@ -6,8 +6,8 @@ export function Help() {
   const { navigate } = useNavigation();
   return (
       <Center flex="1">
-        <Heading>Help</Heading>
-        <Button onPress={() => navigate("SignIn")}>SignIn Screen</Button>
+        <Heading>Help Screen</Heading>
+        <Button variant="link" onPress={() => navigate("SignIn")}>SignIn Screen</Button>
       </Center>
   );
 }
