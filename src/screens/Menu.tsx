@@ -8,8 +8,10 @@ export function Menu() {
     <DefaultTemplate safeAreaTop>
       <ScrollView w={"full"} h="80">
         <Center mt="3" mb="4">
-          <Heading fontSize="xl">Cyan</Heading>
+          <Heading>Menu</Heading>
         </Center>
+
+        <Heading fontSize="xl">Cyan</Heading>
         <VStack flex="1">
           {Object.keys(colors.cyan).map((key, index) => {
             if (index >= 1 && index <= 5)
@@ -20,9 +22,8 @@ export function Menu() {
               );
           })}
         </VStack>
-        <Center mt="8" mb="4">
-          <Heading fontSize="xl">Yellow</Heading>
-        </Center>
+
+        <Heading fontSize="xl">Yellow</Heading>
         <VStack flex="1">
           {Object.keys(colors.cyan).map((key, index) => {
             if (index >= 1 && index <= 5)
@@ -33,9 +34,8 @@ export function Menu() {
               );
           })}
         </VStack>
-        <Center mt="8" mb="4">
-          <Heading fontSize="xl"> Violet</Heading>
-        </Center>
+
+        <Heading fontSize="xl"> Violet</Heading>
         <VStack flex="1">
           {Object.keys(colors.violet).map((key, index) => {
             if (index >= 1 && index <= 5)

@@ -1,10 +1,13 @@
 import React from "react";
-import { Badge, Center } from "native-base";
+import { Button, Center, Heading } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 
 export function RegisterNewUser() {
+  const { navigate } = useNavigation();
   return (
-    <Center flex="1">
-      <Badge>RegisterNewUser</Badge>
-    </Center>
+      <Center flex="1">
+        <Heading>RegisterNewUser</Heading>
+        <Button onPress={() => navigate("SignIn")}>SignIn Screen</Button>
+      </Center>
   );
 }

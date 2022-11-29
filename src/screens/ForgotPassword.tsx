@@ -1,14 +1,13 @@
 import React from "react";
-import { Badge, Center } from "native-base";
-import WithHeaderTemplate from "@templates/WithHeaderTemplate";
+import { Button, Center, Heading } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 
 export function ForgotPassword() {
-
+  const { navigate } = useNavigation();
   return (
-    <WithHeaderTemplate>
       <Center flex="1">
-        <Badge >ForgotPassword</Badge>
+        <Heading>ForgotPassword</Heading>
+        <Button onPress={() => navigate("SignIn")}>SignIn Screen</Button>
       </Center>
-    </WithHeaderTemplate>
   );
 }
