@@ -31,25 +31,25 @@ export function SignIn() {
 
     if (response.error) {
       setError(true);
-      // console.log(response.message);
+      console.log(response.message);
     } else {
       setError(false);
-      // console.log(response.data);
+      console.log(response.data);
       navigate("HomeRoutes");
     }
   };
 
   return (
     <Center flex="1">
-      <Box w="75%" mb={6}>
-        <Heading fontWeight="medium">Olá!</Heading>
-        <Heading size="md" color="muted.400" fontWeight="medium">
-          Faça seu login para continuar!
-        </Heading>
-      </Box>
+      <Stack space={4} w="75%" alignItems="center">
+        <FormControl isInvalid={error} w="100%" maxW="300px">
+          <Box w="100%" mb="3%">
+            <Heading fontWeight="medium">Olá!</Heading>
+            <Heading size="md" color="muted.400" fontWeight="medium">
+              Faça seu login para continuar.
+            </Heading>
+          </Box>
 
-      <Stack space={4} w="100%" alignItems="center">
-        <FormControl isInvalid={error} w="75%" maxW="300px">
           <FormControl.Label>E-mail</FormControl.Label>
           <Input
             w={{
@@ -104,27 +104,27 @@ export function SignIn() {
             onChangeText={(value) => setPassword(value)}
           />
 
-          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon />}>
             Dados incorretos. Tente novamente.
           </FormControl.ErrorMessage>
 
-          <Button mt={8} onPress={handleLogin} isLoading={loading}>
+          <Button mt={"7%"} onPress={handleLogin} isLoading={loading}>
             Entrar
           </Button>
+
+          <Box mt={4} w="100%">
+            <Button
+              bgColor="gray.200"
+              variant="outline"
+              onPress={() => navigate("SocialSignIn")}
+            >
+              Quero me logar com minha conta Google
+            </Button>
+          </Box>
         </FormControl>
       </Stack>
 
-      <Box mt={4} w="75%">
-        <Button
-          bgColor="gray.200"
-          variant="outline"
-          onPress={() => navigate("SocialSignIn")}
-        >
-          Quero me logar com minha conta Google
-        </Button>
-      </Box>
-
-      <Box mt={8}>
+      <Box mt={4} flexDirection="row" alignItems="center">
         <Button
           variant="link"
           p="1"
@@ -132,7 +132,8 @@ export function SignIn() {
           onPress={() => navigate("ForgotPassword")}
         >
           Esqueci minha senha
-        </Button>
+        </Button>{" "}
+        |{" "}
         <Button
           variant="link"
           p="1"
@@ -141,9 +142,9 @@ export function SignIn() {
         >
           Quero me cadastrar!
         </Button>
-        <Button variant="link" p="1" size="sm" onPress={() => navigate("Help")}>
+        {/* <Button variant="link" p="1" size="sm" onPress={() => navigate("Help")}>
           Precisa de ajuda?
-        </Button>
+        </Button> */}
       </Box>
     </Center>
   );

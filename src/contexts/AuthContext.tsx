@@ -69,10 +69,9 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
           message: error.response?.data,
         };
       }
-      console.log('> error', error);
       return {
         error: true,
-        message: error.message,
+        message: (error as any as {message: string}).message,
       };
     } finally {
       setLoading(false);
