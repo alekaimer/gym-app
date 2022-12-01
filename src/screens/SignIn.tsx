@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Badge,
   Box,
   Button,
   Center,
@@ -15,20 +14,30 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import { useAuth } from "@hooks/useAuth";
+
 export function SignIn() {
   const { navigate } = useNavigation();
+  const { loading, signInApi, user } = useAuth();
 
   const [show, setShow] = useState(false);
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    const response = await signInApi(email);
+
+    if (response.error) {
       setError(true);
-    }, 2000);
-  }
+      // console.log(response.message);
+    } else {
+      setError(false);
+      // console.log(response.data);
+      navigate("HomeRoutes");
+    }
+  };
 
   return (
     <Center flex="1">
@@ -61,6 +70,8 @@ export function SignIn() {
               />
             }
             placeholder="Digite seu -mail"
+            value={email}
+            onChangeText={(value) => setEmail(value)}
           />
 
           <FormControl.Label>Senha</FormControl.Label>
@@ -89,13 +100,15 @@ export function SignIn() {
               </Pressable>
             }
             placeholder="Digite sua senha"
+            value={password}
+            onChangeText={(value) => setPassword(value)}
           />
 
           <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
             Dados incorretos. Tente novamente.
           </FormControl.ErrorMessage>
 
-          <Button mt={8} onPress={() => handleLogin()} isLoading={loading}>
+          <Button mt={8} onPress={handleLogin} isLoading={loading}>
             Entrar
           </Button>
         </FormControl>
