@@ -9,7 +9,7 @@ export function HomeHeader({ ...props }) {
   const { navigate } = useNavigation();
 
   return (
-    <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center" {...props}>
+    <HStack bg="gray.600" pt={5} pb={5} px={8} alignItems="center" {...props}>
       <UserPhoto
         source={{
           uri: "https://github.com/alekaimer.png",
