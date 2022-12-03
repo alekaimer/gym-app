@@ -8,6 +8,10 @@ import { Exercise } from "@screens/Exercise";
 import { Icon, useTheme } from "native-base";
 import { Platform } from "react-native";
 
+import HomeSvg from "@assets/home.svg";
+import ProfileSvg from "@assets/profile.svg";
+import HistorySvg from "@assets/history.svg";
+
 export type HomeRoutesParams = {
   Home: undefined;
   Profile: undefined;
@@ -48,8 +52,8 @@ export function HomeRoutes() {
           options={{
             tabBarIcon: ({ color }: NavigationTabProps) => (
               <Icon
-                as={MaterialIcons}
-                name={"home"}
+                as={<HomeSvg fill={color} height={sizes[6]} width={sizes[6]} />}
+                name={""}
                 color={color}
                 size={sizes[2]}
               />
@@ -62,12 +66,7 @@ export function HomeRoutes() {
           component={Profile}
           options={{
             tabBarIcon: ({ color }: NavigationTabProps) => (
-              <Icon
-                as={MaterialIcons}
-                name={"person"}
-                color={color}
-                size={sizes[2]}
-              />
+              <ProfileSvg fill={color} height={sizes[6]} width={sizes[6]} />
             ),
           }}
         />
@@ -77,12 +76,7 @@ export function HomeRoutes() {
           component={History}
           options={{
             tabBarIcon: ({ color }: NavigationTabProps) => (
-              <Icon
-                as={MaterialIcons}
-                name={"menu"}
-                color={color}
-                size={sizes[2]}
-              />
+              <HistorySvg fill={color} height={sizes[6]} width={sizes[6]} />
             ),
           }}
         />
