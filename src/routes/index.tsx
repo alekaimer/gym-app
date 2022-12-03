@@ -1,8 +1,9 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeRoutes } from "./home.routes";
-import { SignInRoutes } from "./signIn.routes";
+import { SignInRoutes } from "./auth.routes";
+import { useTheme } from "native-base";
 
 export type MainRoutesParams = {
   HomeRoutes: undefined;
@@ -12,15 +13,19 @@ export type MainRoutesParams = {
 export function MainRoutes() {
   const { Navigator, Screen } = createNativeStackNavigator();
 
+  const nativeBaseTheme = useTheme();
+
+  const navigationTheme = DefaultTheme;
+  navigationTheme.colors.background = nativeBaseTheme.colors.gray[700];
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={navigationTheme}>
       <Navigator
         screenOptions={{
           headerShown: false,
           gestureEnabled: true,
           fullScreenGestureEnabled: true,
           gestureDirection: "horizontal",
-
         }}
       >
         <Screen name="SignInRoutes" component={SignInRoutes} />

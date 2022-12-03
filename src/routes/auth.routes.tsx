@@ -1,25 +1,23 @@
 import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { SignIn } from "@screens/SignIn";
 import { SocialSignIn } from "@screens/SocialSignIn";
 import { ForgotPassword } from "@screens/ForgotPassword";
-import { RegisterNewUser } from "@screens/RegisterNewUser";
+import { SignUp } from "@screens/SignUp";
 import { Help } from "@screens/Help";
 
-export type SignInRouterParams = {
+export type AuthRouterParams = {
   SignIn: undefined;
   ForgotPassword: undefined;
-  RegisterNewUser: undefined;
+  SignUp: undefined;
   Help: undefined;
   SocialSignIn: undefined;
 };
 
-interface NavigationTabProps {
-  color: string;
-}
+export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRouterParams>;
 
-const { Navigator, Screen, Group } = createNativeStackNavigator<SignInRouterParams>();
+const { Navigator, Screen, Group } = createNativeStackNavigator<AuthRouterParams>();
 
 export function SignInRoutes() {
   return (
@@ -35,7 +33,7 @@ export function SignInRoutes() {
 
         <Screen name="ForgotPassword" component={ForgotPassword} />
 
-        <Screen name="RegisterNewUser" component={RegisterNewUser} />
+        <Screen name="SignUp" component={SignUp} />
 
         <Screen name="Help" component={Help} />
       </Group>

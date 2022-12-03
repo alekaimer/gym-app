@@ -1,5 +1,5 @@
 import { MainRoutesParams } from "@routes/index";
-import { SignInRouterParams } from "@routes/signIn.routes";
+import { AuthRouterParams } from "@routes/auth.routes";
 import { HomeRoutesParams } from "../routes/home.routes";
 
 declare global {
@@ -7,6 +7,6 @@ declare global {
     interface RootParamList
       extends MainRoutesParams,
         HomeRoutesParams,
-        SignInRouterParams {}
+        AuthRouterParams {}
   }
 }
