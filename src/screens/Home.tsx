@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, Heading, HStack, Text, VStack } from "native-base";
-import WithHeaderTemplate from "@templates/WithHeaderTemplate";
+import HomeTemplate from "@templates/HomeTemplate";
 import { Group } from "@components/Group";
 import { ExerciseCard } from "@components/ExerciseCard";
 
@@ -15,7 +15,7 @@ function Home() {
   const [activeGroup, setActiveGroup] = React.useState("costas");
 
   return (
-    <WithHeaderTemplate>
+    <HomeTemplate>
       <FlatList
         data={groups}
         renderItem={({ item }) => (
@@ -54,7 +54,7 @@ function Home() {
           }}
         />
       </VStack>
-    </WithHeaderTemplate>
+    </HomeTemplate>
   );
 }
 
