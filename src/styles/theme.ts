@@ -2,50 +2,37 @@ import { extendTheme } from "native-base";
 
 export const theme = extendTheme({
   colors: {
-    grey: {
-      950: "##09090a",
-      900: "#121214",
-      800: "#202024",
-      600: "#323238",
-      300: "#8d8d99",
-      200: "#c4c4cc",
-    },
     green: {
-      500: "#047c3f",
+      700: "#00875F",
+      500: "#00B37E",
     },
-    yellow: {
-      500: "#f9c74f",
-      600: "#bba317",
-    },
-    red: {
-      500: "#db4437",
+    gray: {
+      700: "#121214",
+      600: "#202024",
+      500: "#29292E",
+      400: "#323238",
+      300: "#7C7C8A",
+      200: "#C4C4CC",
+      100: "#E1E1E6",
     },
     white: "#FFFFFF",
-    primary: {
-      500: "#41417E",
-    }
+    red: {
+      500: "#F75A68",
+    },
   },
-
   fonts: {
     heading: "Roboto_700Bold",
     body: "Roboto_400Regular",
-    medium: "Roboto_500Medium",
   },
-
   fontSizes: {
-    xs: "12px",
-    sm: "14px",
-    md: "16px",
-    lg: "18px",
-    xl: "20px",
-    "2xl": "24px",
-    "3xl": "28px",
-    "4xl": "36px",
-    "5xl": "48px",
-    "6xl": "64px",
+    xs: 12,
+    sm: 14,
+    md: 16,
+    lg: 18,
+    xl: 20,
   },
-
   sizes: {
     14: 56,
+    33: 148,
   },
 });
