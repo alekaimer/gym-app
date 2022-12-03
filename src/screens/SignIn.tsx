@@ -1,12 +1,23 @@
 import React from "react";
-import { VStack, Image, Center, Text, Heading, ScrollView } from "native-base";
+import {
+  VStack,
+  Image,
+  Center,
+  Text,
+  Heading,
+  ScrollView,
+  Box,
+} from "native-base";
 
 import BackgroundImg from "@assets/background.png";
 import LogoSvg from "@assets/logo.svg";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { useNavigation } from "@react-navigation/native";
 
 export function SignIn() {
+  const { navigate } = useNavigation();
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -14,7 +25,7 @@ export function SignIn() {
       }}
       showsHorizontalScrollIndicator={false}
     >
-      <VStack flex={1} bgColor="gray.700" px={10} pb={16}>
+      <VStack flex={1} px={10} pb={16}>
         <Image
           source={BackgroundImg}
           alt="Pessoas treinando"
@@ -53,12 +64,15 @@ export function SignIn() {
           <Button title="Acessar" />
         </Center>
 
-        <Center mt={24}>
+        <Center mt={24} justifyContent="center">
           <Text mb={3} color="gray.100" fontSize="sm" textAlign="center">
             Ainda não tem acesso?
           </Text>
-
-          <Button title="Criar conta" variant="outline" />
+          <Button
+            title="Criar conta"
+            variant="outline"
+            onPress={() => navigate("SignUp")}
+          />
         </Center>
       </VStack>
     </ScrollView>
