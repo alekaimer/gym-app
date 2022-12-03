@@ -5,14 +5,14 @@ import { HistoryCard } from "@components/HistoryCard";
 
 export function History() {
   const [exercises, setExercises] = React.useState([
-    // { title: "03.12.22", data: ["Puxada frontal", "Remada unilateral"] },
-    // { title: "04.12.22", data: ["Puxada frontal"] },
-    // { title: "03.12.22", data: ["Puxada frontal", "Remada unilateral"] },
-    // { title: "04.12.22", data: ["Puxada frontal"] },
-    // { title: "03.12.22", data: ["Puxada frontal", "Remada unilateral"] },
-    // { title: "04.12.22", data: ["Puxada frontal"] },
-    // { title: "03.12.22", data: ["Puxada frontal", "Remada unilateral"] },
-    // { title: "04.12.22", data: ["Puxada frontal"] },
+    { title: "03.12.22", data: ["Puxada frontal", "Remada unilateral"] },
+    { title: "04.12.22", data: ["Puxada frontal"] },
+    { title: "03.12.22", data: ["Puxada frontal", "Remada unilateral"] },
+    { title: "04.12.22", data: ["Puxada frontal"] },
+    { title: "03.12.22", data: ["Puxada frontal", "Remada unilateral"] },
+    { title: "04.12.22", data: ["Puxada frontal"] },
+    { title: "03.12.22", data: ["Puxada frontal", "Remada unilateral"] },
+    { title: "04.12.22", data: ["Puxada frontal"] },
   ]);
 
   return (
