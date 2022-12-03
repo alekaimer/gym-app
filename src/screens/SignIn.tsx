@@ -62,7 +62,8 @@ export function SignIn() {
           />
           <Input mb={4} placeholder="Senha" secureTextEntry />
 
-          <Button title="Acessar" />
+          <Button title="Acessar"
+            onPress={() => navigate("HomeRoutes")} />
         </Center>
 
         <Center mt={24} justifyContent="center">
