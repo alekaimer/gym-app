@@ -76,21 +76,6 @@ export function HomeRoutes() {
             ),
           }}
         />
-        
-        <Screen
-        name="ComponentsExibition"
-        component={ComponentsExibition}
-        options={{
-          tabBarIcon: ({ color }: NavigationTabProps) => (
-            <Icon
-              as={MaterialIcons}
-              name={"settings-input-component"}
-              color={color}
-              size={"xl"}
-            />
-          ),
-        }}
-      />
       </Group>
     </Navigator>
   );
