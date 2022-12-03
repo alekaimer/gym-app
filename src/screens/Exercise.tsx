@@ -6,11 +6,11 @@ import {
 } from "native-base";
 import { StackTemplate } from "@templates/StackTemplate";
 
-export function Perfil() {
+export function Exercise() {
   return (
-    <StackTemplate title="Perfil">
+    <StackTemplate title="Exercise">
       <Center flex={1}>
-        <Heading>Perfil Screen</Heading>
+        <Heading>Exercise Screen</Heading>
       </Center>
     </StackTemplate>
   );

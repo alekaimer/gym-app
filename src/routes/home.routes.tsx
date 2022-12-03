@@ -2,16 +2,17 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 import Home from "@screens/Home";
-import { Perfil } from "@screens/Perfil";
-import { Menu } from "@screens/Menu";
-import { Icon } from "native-base";
-import { ComponentsExibition } from "@screens/ComponentsExibition";
+import { Profile } from "@screens/Profile";
+import { History } from "@screens/History";
+import { Exercise } from "@screens/Exercise";
+import { Icon, useTheme } from "native-base";
+import { Platform } from "react-native";
 
 export type HomeRoutesParams = {
   Home: undefined;
-  Perfil: undefined;
-  Menu: undefined;
-  ComponentsExibition: undefined;
+  Profile: undefined;
+  History: undefined;
+  Exercise: undefined;
 };
 
 interface NavigationTabProps {
@@ -22,13 +23,22 @@ const { Navigator, Screen, Group } =
   createBottomTabNavigator<HomeRoutesParams>();
 
 export function HomeRoutes() {
+  const { sizes, colors } = useTheme();
+
   return (
     <Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "red",
-        tabBarInactiveTintColor: "blue",
         tabBarShowLabel: false,
+        tabBarActiveTintColor: colors.green[500],
+        tabBarInactiveTintColor: colors.gray[200],
+        tabBarStyle: {
+          backgroundColor: colors.gray[800],
+          borderTopWidth: 0,
+          height: Platform.OS === "android" ? "auto" : sizes[16],
+          paddingBottom: sizes[6],
+          paddingTop: sizes[6],
+        },
       }}
     >
       <Group>
@@ -41,42 +51,50 @@ export function HomeRoutes() {
                 as={MaterialIcons}
                 name={"home"}
                 color={color}
-                size={"xl"}
+                size={sizes[2]}
               />
             ),
           }}
         />
 
         <Screen
-          name="Perfil"
-          component={Perfil}
+          name="Profile"
+          component={Profile}
           options={{
             tabBarIcon: ({ color }: NavigationTabProps) => (
               <Icon
                 as={MaterialIcons}
                 name={"person"}
                 color={color}
-                size={"xl"}
+                size={sizes[2]}
               />
             ),
           }}
         />
 
         <Screen
-          name="Menu"
-          component={Menu}
+          name="History"
+          component={History}
           options={{
             tabBarIcon: ({ color }: NavigationTabProps) => (
               <Icon
                 as={MaterialIcons}
                 name={"menu"}
                 color={color}
-                size={"xl"}
+                size={sizes[2]}
               />
             ),
           }}
         />
       </Group>
+
+      <Screen
+        name="Exercise"
+        component={Exercise}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
     </Navigator>
   );
 }
