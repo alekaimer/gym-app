@@ -4,7 +4,7 @@ import { WithHeaderTemplate } from "@templates/WithHeaderTemplate";
 
 export function Profile() {
   return (
-    <WithHeaderTemplate>
+    <WithHeaderTemplate title="Profile">
       <Center flex={1}>
         <Heading color="gray.100">Profile Screen</Heading>
       </Center>
