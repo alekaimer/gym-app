@@ -1,15 +1,12 @@
 import React from "react";
-import { Badge, Center, Button, Heading } from "native-base";
+import { Center, Heading } from "native-base";
 import WithHeaderTemplate from "@templates/WithHeaderTemplate";
-import { useNavigation } from "@react-navigation/native";
 
 function Home() {
-  const { navigate } = useNavigation();
   return (
     <WithHeaderTemplate>
       <Center flex="1">
-        <Heading>Home</Heading>
-        <Button onPress={() => navigate("SignInRoutes")}>SignIn Screen</Button>
+        <Heading color="gray.100">Home</Heading>
       </Center>
     </WithHeaderTemplate>
   );

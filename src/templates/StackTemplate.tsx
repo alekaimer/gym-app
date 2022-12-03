@@ -13,7 +13,7 @@ export function StackTemplate({ title, children }: StackTemplateProps) {
   const { goBack } = useNavigation();
 
   return (
-    <Box flex="1" bgColor="white">
+    <Box flex="1" bgColor="gray.600">
       <Box bgColor="gray.200" safeAreaTop>
         <Flex
           direction="row"
