@@ -40,8 +40,8 @@ export function HomeRoutes() {
           backgroundColor: colors.gray[800],
           borderTopWidth: 0,
           height: Platform.OS === "android" ? "auto" : sizes[16],
-          paddingBottom: sizes[6],
-          paddingTop: sizes[6],
+          paddingBottom: sizes[7],
+          paddingTop: sizes[7],
         },
       }}
     >
@@ -52,7 +52,7 @@ export function HomeRoutes() {
           options={{
             tabBarIcon: ({ color }: NavigationTabProps) => (
               <Icon
-                as={<HomeSvg fill={color} height={sizes[6]} width={sizes[6]} />}
+                as={<HomeSvg fill={color} height={sizes[8]} width={sizes[8]} />}
                 name={""}
                 color={color}
                 size={sizes[2]}
@@ -66,7 +66,7 @@ export function HomeRoutes() {
           component={Profile}
           options={{
             tabBarIcon: ({ color }: NavigationTabProps) => (
-              <ProfileSvg fill={color} height={sizes[6]} width={sizes[6]} />
+              <ProfileSvg fill={color} height={sizes[8]} width={sizes[8]} />
             ),
           }}
         />
@@ -76,7 +76,7 @@ export function HomeRoutes() {
           component={History}
           options={{
             tabBarIcon: ({ color }: NavigationTabProps) => (
-              <HistorySvg fill={color} height={sizes[6]} width={sizes[6]} />
+              <HistorySvg fill={color} height={sizes[8]} width={sizes[8]} />
             ),
           }}
         />
