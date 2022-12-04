@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "evolution-sellercenter-app",
-    "slug": "evolution-sellercenter-app",
+    "name": "ignite-gym",
+    "slug": "ignite-gym",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -32,8 +32,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "b0d653dc-9c5e-4360-988c-05d07281d1b2"
+        "projectId": "41e883f0-4ead-471c-bbe8-dda5a7a6efb6"
       }
-    }
+    },
+    "owner": "alekaimer"
   }
 }
