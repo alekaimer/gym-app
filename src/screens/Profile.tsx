@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Center,
   Heading,
@@ -17,24 +17,32 @@ import * as ImagePicker from "expo-image-picker";
 const PHOTO_SIZE = 33;
 
 export function Profile() {
-  const [userPhoto, setUserPhoto] = React.useState<string | null>(null);
+  const [photoIsLoading, setPhotoIsLoading] = useState(false);
+
+  const [userPhoto, setUserPhoto] = useState<string | null>(null);
 
   async function handleUserPhotoSelect() {
-    await ImagePicker.requestMediaLibraryPermissionsAsync();
+    setPhotoIsLoading(true);
+    try {
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      aspect: [4, 4],
-      allowsEditing: true,
-    });
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      });
 
-    if (result.cancelled) {
-      return;
+      if (result.cancelled) {
+        return;
+      }
+
+      result.uri && setUserPhoto(result.uri);
+    } catch (error) {
+      Alert.alert("Não foi possível acessar a galeria de fotos.");
+    } finally {
+      setPhotoIsLoading(false);
     }
-
-    setUserPhoto(result.uri);
-    return result;
   }
 
   useEffect(() => {
@@ -46,7 +54,7 @@ export function Profile() {
       <ScrollView>
         <Center px={10} mt={6}>
           <Skeleton
-            isLoaded={true}
+            isLoaded={!photoIsLoading}
             startColor="gray.300"
             endColor="gray.400"
             w={PHOTO_SIZE}
