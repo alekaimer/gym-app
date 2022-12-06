@@ -1,9 +1,9 @@
 import * as React from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useTheme, View } from "native-base";
 import { HomeRoutes } from "./home.routes";
 import { SignInRoutes } from "./auth.routes";
-import { useTheme } from "native-base";
 
 export type MainRoutesParams = {
   HomeRoutes: undefined;
@@ -19,18 +19,20 @@ export function MainRoutes() {
   navigationTheme.colors.background = nativeBaseTheme.colors.gray[700];
 
   return (
-    <NavigationContainer theme={navigationTheme}>
-      <Navigator
-        screenOptions={{
-          headerShown: false,
-          gestureEnabled: true,
-          fullScreenGestureEnabled: true,
-          gestureDirection: "horizontal",
-        }}
-      >
-        <Screen name="SignInRoutes" component={SignInRoutes} />
-        <Screen name="HomeRoutes" component={HomeRoutes} />
-      </Navigator>
-    </NavigationContainer>
+    <View flex={1} bgColor="gray.700" >
+      <NavigationContainer theme={navigationTheme}>
+        <Navigator
+          screenOptions={{
+            headerShown: false,
+            gestureEnabled: true,
+            fullScreenGestureEnabled: true,
+            gestureDirection: "horizontal",
+          }}
+        >
+          <Screen name="SignInRoutes" component={SignInRoutes} />
+          <Screen name="HomeRoutes" component={HomeRoutes} />
+        </Navigator>
+      </NavigationContainer>
+    </View>
   );
 }
