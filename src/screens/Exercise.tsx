@@ -1,17 +1,13 @@
 import React from "react";
-import {
-  Center,
-  Badge,
-  Heading,
-} from "native-base";
-import { StackTemplate } from "@templates/StackTemplate";
+import { Center, Heading } from "native-base";
+import { DefaultTemplate } from "@templates/DefaultTemplate";
 
 export function Exercise() {
   return (
-    <StackTemplate title="Exercise">
+    <DefaultTemplate>
       <Center flex={1}>
         <Heading>Exercise Screen</Heading>
       </Center>
-    </StackTemplate>
+    </DefaultTemplate>
   );
 }
