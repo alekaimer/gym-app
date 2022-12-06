@@ -1,7 +1,6 @@
 import React from "react";
 import { Heading, HStack, Icon, Image, Text, VStack } from "native-base";
 
-
 type HistoryCardProps = {};
 
 export const HistoryCard = ({ ...rest }: HistoryCardProps) => {
@@ -13,10 +12,14 @@ export const HistoryCard = ({ ...rest }: HistoryCardProps) => {
       mb={3}
       rounded="md"
       alignItems="center"
-
     >
       <VStack flex={1}>
-        <Heading color="white" fontSize="md" textTransform="capitalize">
+        <Heading
+          color="white"
+          fontSize="md"
+          textTransform="capitalize"
+          numberOfLines={1}
+        >
           Costas
         </Heading>
 
