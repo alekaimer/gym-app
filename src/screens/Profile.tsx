@@ -63,7 +63,7 @@ export function Profile() {
           </Heading>
 
           <Input
-            placeholder="Senha antiga"
+            placeholder="Senha atual"
             bg="gray.600"
             mb={4}
             secureTextEntry
@@ -77,7 +77,7 @@ export function Profile() {
           />
 
           <Input
-            placeholder="confirme a nova senha"
+            placeholder="Confirme sua nova senha"
             bg="gray.600"
             mb={4}
             secureTextEntry
