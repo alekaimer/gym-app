@@ -17,12 +17,31 @@ import LogoSvg from "@assets/logo.svg";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
+type FormDataProps = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
 export function SignUp() {
   const { navigate } = useNavigation();
-  const { control } = useForm();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
+    // optional default values
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
-  function handleSignUp() {
-    console.log("> control: ", JSON.stringify(control, null, 2));
+  function handleSignUp(data: FormDataProps) {
+    console.log("> data: ", data);
   }
 
   return (
@@ -62,14 +81,17 @@ export function SignUp() {
           <Controller
             control={control}
             name="name"
+            rules={{
+              required: "Nome obrigatório",
+            }}
             render={({ field: { onChange, value } }) => (
               <Input
-                mb={4}
                 placeholder="Nome"
                 autoCorrect={false}
                 onChangeText={onChange}
                 value={value}
                 autoCapitalize="words"
+                errorMessage={errors.name?.message}
               />
             )}
           />
@@ -77,15 +99,23 @@ export function SignUp() {
           <Controller
             control={control}
             name="email"
+            rules={{
+              required: "E-mail obrigatório",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "E-mail inválido",
+              },
+            }}
             render={({ field: { onChange, value } }) => (
               <Input
-                mb={4}
+                mt={4}
                 placeholder="E-mail"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
                 onChangeText={onChange}
                 value={value}
+                errorMessage={errors.email?.message}
               />
             )}
           />
@@ -93,13 +123,25 @@ export function SignUp() {
           <Controller
             control={control}
             name="password"
+            rules={{
+              required: "Senha é obrigatória",
+              minLength: {
+                value: 6,
+                message: "No mínimo 6 caracteres",
+              },
+              maxLength: {
+                value: 12,
+                message: "No máximo 12 caracteres",
+              },
+            }}
             render={({ field: { onChange, value } }) => (
               <Input
-                mb={4}
+                mt={4}
                 placeholder="Senha"
                 secureTextEntry
                 onChangeText={onChange}
                 value={value}
+                errorMessage={errors.password?.message}
               />
             )}
           />
@@ -107,18 +149,36 @@ export function SignUp() {
           <Controller
             control={control}
             name="confirmPassword"
+            rules={{
+              required: "Confirmar a senha é obrigatório",
+              minLength: {
+                value: 6,
+                message: "No mínimo 6 caracteres",
+              },
+              maxLength: {
+                value: 12,
+                message: "No máximo 12 caracteres",
+              },
+            }}
             render={({ field: { onChange, value } }) => (
               <Input
-                mb={4}
+                mt={4}
                 placeholder="Confirme sua senha"
                 secureTextEntry
                 onChangeText={onChange}
                 value={value}
+                onSubmitEditing={handleSubmit(handleSignUp)}
+                returnKeyType="send"
+                errorMessage={errors.confirmPassword?.message}
               />
             )}
           />
 
-          <Button title="Criar e acessar" onPress={handleSignUp} />
+          <Button
+            mt={8}
+            title="Criar e acessar"
+            onPress={handleSubmit(handleSignUp)}
+          />
         </Center>
 
         <Center mt={12} justifyContent="center">
