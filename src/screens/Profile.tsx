@@ -6,6 +6,7 @@ import {
   Skeleton,
   Text,
   VStack,
+  useToast,
 } from "native-base";
 import { WithHeaderTemplate } from "@templates/WithHeaderTemplate";
 import { UserPhoto } from "@components/UserPhoto";
@@ -13,6 +14,7 @@ import { Alert, Platform, TouchableOpacity } from "react-native";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 
 const PHOTO_SIZE = 33;
 
@@ -20,6 +22,8 @@ export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
 
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
+
+  const toast = useToast();
 
   async function handleUserPhotoSelect() {
     setPhotoIsLoading(true);
@@ -37,9 +41,28 @@ export function Profile() {
         return;
       }
 
-      result.uri && setUserPhoto(result.uri);
+      if (result.uri) {
+        const photoInfo = await FileSystem.getInfoAsync(result.uri);
+
+        if (photoInfo.size && photoInfo.size > 102) {
+          toast.show({
+            title: "A imagem deve ter no máximo 5MB.",
+            bgColor: "red.500",
+            placement: "top",
+          });
+          // Alert.alert("A imagem deve ter no máximo 5MB.");
+          return;
+        }
+
+        setUserPhoto(result.uri);
+      }
     } catch (error) {
-      Alert.alert("Não foi possível acessar a galeria de fotos.");
+      toast.show({
+        title: "Não foi possível acessar a galeria de fotos.",
+        bgColor: "red.500",
+        placement: "top",
+      });
+      // Alert.alert("Não foi possível acessar a galeria de fotos.");
     } finally {
       setPhotoIsLoading(false);
     }
