@@ -16,5 +16,5 @@ npm install --global eas-cli
 ```
 and 
 ```
-eas build -p android
+eas build -p android --profile preview
 ```

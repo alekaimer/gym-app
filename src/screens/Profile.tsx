@@ -44,7 +44,7 @@ export function Profile() {
       if (result.uri) {
         const photoInfo = await FileSystem.getInfoAsync(result.uri);
 
-        if (photoInfo.size && photoInfo.size > 102) {
+        if (photoInfo.size && photoInfo.size > 1024 * (1024 * 5)) {
           toast.show({
             title: "A imagem deve ter no máximo 5MB.",
             bgColor: "red.500",
