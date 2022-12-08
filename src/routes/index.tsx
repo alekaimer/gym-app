@@ -11,7 +11,7 @@ export type MainRoutesParams = {
 };
 
 export function MainRoutes() {
-  const { Navigator, Screen } = createNativeStackNavigator();
+  const { Navigator, Screen } = createNativeStackNavigator<MainRoutesParams>();
 
   const nativeBaseTheme = useTheme();
 
@@ -19,7 +19,7 @@ export function MainRoutes() {
   navigationTheme.colors.background = nativeBaseTheme.colors.gray[700];
 
   return (
-    <View flex={1} bgColor="gray.700" >
+    <View flex={1} bgColor="gray.700">
       <NavigationContainer theme={navigationTheme}>
         <Navigator
           screenOptions={{
