@@ -8,8 +8,8 @@ import {
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { MainRoutesParams } from "@routes/index";
 
 import BackgroundImg from "@assets/background.png";
@@ -42,7 +42,7 @@ const schema = yup.object().shape({
 });
 
 export function SignUp() {
-  const { navigate, reset } = useNavigation();
+  const { reset } = useNavigation();
 
   const {
     control,
@@ -112,6 +112,7 @@ export function SignUp() {
               <Input
                 placeholder="Nome"
                 autoCorrect={false}
+                returnKeyType="next"
                 onChangeText={onChange}
                 value={value}
                 autoCapitalize="words"
@@ -130,6 +131,8 @@ export function SignUp() {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
+                returnKeyLabel="next"
+                returnKeyType="next"
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.email?.message}
@@ -145,6 +148,7 @@ export function SignUp() {
                 mt={4}
                 placeholder="Senha"
                 secureTextEntry
+                returnKeyType="next"
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.password?.message}
@@ -180,7 +184,7 @@ export function SignUp() {
           <Button
             title="Voltar para o login"
             variant="outline"
-            onPress={() => navigate("SignIn")}
+            onPress={() => goToRouteAndReset("SignInRoutes")}
           />
         </Center>
       </VStack>
