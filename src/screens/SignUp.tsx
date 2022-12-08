@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   VStack,
   Image,
@@ -6,10 +5,12 @@ import {
   Text,
   Heading,
   ScrollView,
-  Box,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { MainRoutesParams } from "@routes/index";
 
 import BackgroundImg from "@assets/background.png";
 import LogoSvg from "@assets/logo.svg";
@@ -24,8 +25,25 @@ type FormDataProps = {
   confirmPassword: string;
 };
 
+const schema = yup.object().shape({
+  name: yup.string().required("Nome é obrigatório"),
+  email: yup
+    .string()
+    .required("E-mail é obrigatório")
+    .email("E-mail inválido!"),
+  password: yup
+    .string()
+    .required("Senha é obrigatória")
+    .min(6, "Senha precisa ter no mínimo 6 caracteres"),
+  confirmPassword: yup
+    .string()
+    .required("Confirmar a senha é obrigatório")
+    .oneOf([yup.ref("  password"), null], "Senhas não conferem"),
+});
+
 export function SignUp() {
-  const { navigate } = useNavigation();
+  const { navigate, reset } = useNavigation();
+
   const {
     control,
     handleSubmit,
@@ -38,10 +56,19 @@ export function SignUp() {
       password: "",
       confirmPassword: "",
     },
+    resolver: yupResolver(schema),
   });
+
+  function goToRouteAndReset(route: keyof MainRoutesParams) {
+    reset({
+      index: 0,
+      routes: [{ name: route }],
+    });
+  };
 
   function handleSignUp(data: FormDataProps) {
     console.log("> data: ", data);
+    goToRouteAndReset("HomeRoutes")
   }
 
   return (
@@ -81,9 +108,6 @@ export function SignUp() {
           <Controller
             control={control}
             name="name"
-            rules={{
-              required: "Nome obrigatório",
-            }}
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Nome"
@@ -99,13 +123,6 @@ export function SignUp() {
           <Controller
             control={control}
             name="email"
-            rules={{
-              required: "E-mail obrigatório",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "E-mail inválido",
-              },
-            }}
             render={({ field: { onChange, value } }) => (
               <Input
                 mt={4}
@@ -123,17 +140,6 @@ export function SignUp() {
           <Controller
             control={control}
             name="password"
-            rules={{
-              required: "Senha é obrigatória",
-              minLength: {
-                value: 6,
-                message: "No mínimo 6 caracteres",
-              },
-              maxLength: {
-                value: 12,
-                message: "No máximo 12 caracteres",
-              },
-            }}
             render={({ field: { onChange, value } }) => (
               <Input
                 mt={4}
@@ -149,17 +155,6 @@ export function SignUp() {
           <Controller
             control={control}
             name="confirmPassword"
-            rules={{
-              required: "Confirmar a senha é obrigatório",
-              minLength: {
-                value: 6,
-                message: "No mínimo 6 caracteres",
-              },
-              maxLength: {
-                value: 12,
-                message: "No máximo 12 caracteres",
-              },
-            }}
             render={({ field: { onChange, value } }) => (
               <Input
                 mt={4}
