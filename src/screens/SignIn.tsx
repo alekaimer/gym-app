@@ -1,5 +1,13 @@
 import React from "react";
-import { VStack, Image, Center, Text, Heading, ScrollView } from "native-base";
+import {
+  VStack,
+  Image,
+  Center,
+  Text,
+  Heading,
+  ScrollView,
+  useToast,
+} from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
@@ -9,6 +17,7 @@ import BackgroundImg from "@assets/background.png";
 import LogoSvg from "@assets/logo.svg";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { api } from "@services/api";
 import { MainRoutesParams } from "@routes/index";
 
 type FormDataProps = {
@@ -21,14 +30,13 @@ const schema = yup.object().shape({
     .string()
     .required("E-mail é obrigatório")
     .email("E-mail inválido!"),
-  password: yup
-    .string()
-    .required("Senha é obrigatória")
-    .min(6, "Senha precisa ter no mínimo 6 caracteres"),
+  password: yup.string().required("Senha é obrigatória"),
 });
 
 export function SignIn() {
-  const { navigate } = useNavigation();
+  const toast = useToast();
+
+  const { navigate, reset } = useNavigation();
 
   const {
     control,
@@ -43,9 +51,26 @@ export function SignIn() {
     resolver: yupResolver(schema),
   });
 
-  function handleLogin(data: FormDataProps) {
-    console.log("> data", data);
-    navigate("HomeRoutes");
+
+  function goToRouteAndReset(route: keyof MainRoutesParams) {
+    reset({
+      index: 0,
+      routes: [{ name: route }],
+    });
+  }
+
+  async function handleLogin({ email, password }: FormDataProps) {
+    try {
+      await api.post("/sessions", { email, password });
+      goToRouteAndReset("HomeRoutes")
+    } catch (error) {
+      toast.show({
+        title: (error as any).message || "Erro ao fazer login",
+        duration: 5000,
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
   }
 
   return (
