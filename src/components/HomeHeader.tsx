@@ -4,9 +4,17 @@ import { UserPhoto } from "./UserPhoto";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
+import { MainRoutesParams } from "@routes/index";
 
 export function HomeHeader({ ...props }) {
-  const { navigate } = useNavigation();
+  const { reset } = useNavigation();
+
+  function goToRouteAndReset(route: keyof MainRoutesParams) {
+    reset({
+      index: 0,
+      routes: [{ name: route }],
+    });
+  }
 
   return (
     <HStack bg="gray.600" pt={5} pb={5} px={8} alignItems="center" {...props}>
@@ -27,13 +35,10 @@ export function HomeHeader({ ...props }) {
         </Heading>
       </VStack>
 
-      <TouchableOpacity onPress={() => navigate("SignInRoutes")}>
-        <Icon
-          as={MaterialIcons}
-          name="logout"
-          color="gray.200"
-          size={7}
-        />
+      <TouchableOpacity
+        onPress={() => goToRouteAndReset("SignInRoutes")}
+      >
+        <Icon as={MaterialIcons} name="logout" color="gray.200" size={7} />
       </TouchableOpacity>
     </HStack>
   );
