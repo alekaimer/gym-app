@@ -1,7 +1,10 @@
-export class AppError {
-  message: string;
+// type Message = string | { [key: string]: string[] };
+type Message = string;
 
-  constructor(message: string) {
+export class AppError {
+  message: Message;
+
+  constructor(message: Message) {
     this.message = message;
   }
 }
