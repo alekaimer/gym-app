@@ -1,25 +1,44 @@
-import React from "react";
-import { FlatList, Heading, HStack, Text, VStack } from "native-base";
+import { useEffect, useState } from "react";
+import { FlatList, Heading, HStack, Text, useToast, VStack } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
+
 import HomeTemplate from "@templates/HomeTemplate";
 import { Group } from "@components/Group";
 import { ExerciseCard } from "@components/ExerciseCard";
-import { useNavigation } from "@react-navigation/native";
 
 function Home() {
-  const [groups, setGroups] = React.useState([
-    "Costas",
-    "Bíceps",
-    "Tríceps",
-    "Ombro",
-  ]);
-  const [exercises, setExercises] = React.useState([1, 2, 3, 4, 5, 6, 7, 8]);
-  const [activeGroup, setActiveGroup] = React.useState("costas");
+  const [groups, setGroups] = useState<string[]>([]);
+  const [exercises, setExercises] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+  const [activeGroup, setActiveGroup] = useState("costas");
 
   const { navigate } = useNavigation();
+  const toast = useToast();
 
   function handleOpenExerciseDetails() {
     navigate("Exercise");
   }
+
+  async function fetchGroups() {
+    try {
+      const { data } = await api.get("/groups");
+      setGroups(data);
+    } catch (error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError ? error.message : "Não foi possível carregar os grupos";
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
 
   return (
     <HomeTemplate>
