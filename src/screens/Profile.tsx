@@ -12,13 +12,15 @@ import { TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+import defaultUserPhoto from "@assets/userPhotoDefault.png";
 import { WithHeaderTemplate } from "@templates/WithHeaderTemplate";
 import { UserPhoto } from "@components/UserPhoto";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { useAuth } from "@hooks/useAuth";
 
 const PHOTO_SIZE = 33;
 
@@ -42,15 +44,29 @@ const schema = yup.object().shape({
   confirmPassword: yup
     .string()
     .required("Confirmar a senha é obrigatório")
-    .oneOf([yup.ref("  password"), null], "Senhas não conferem"),
+    .oneOf([yup.ref("password"), null], "Senhas não conferem"),
 });
 
 export function Profile() {
-  const [photoIsLoading, setPhotoIsLoading] = useState(false);
-
-  const [userPhoto, setUserPhoto] = useState<string | null>(null);
-
   const toast = useToast();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
+    // optional default values
+    defaultValues: {
+      name: "",
+      oldPassword: "",
+      password: "",
+      confirmPassword: "",
+    },
+    resolver: yupResolver(schema),
+  });
+  const { user } = useAuth();
+
+  const [photoIsLoading, setPhotoIsLoading] = useState(false);
+  const [userPhoto, setUserPhoto] = useState<string | null>(null);
 
   async function handleUserPhotoSelect() {
     setPhotoIsLoading(true);
@@ -95,32 +111,18 @@ export function Profile() {
     }
   }
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormDataProps>({
-    // optional default values
-    defaultValues: {
-      name: "",
-      oldPassword: "",
-      password: "",
-      confirmPassword: "",
-    },
-    resolver: yupResolver(schema),
-  });
-
   function handleProfileUpdate(data: FormDataProps) {
     console.log(data);
 
-    if (false) { //para erro
+    if (false) {
+      //para erro
 
       toast.show({
         title: "Erro na atualização do perfil!",
         bgColor: "red.500",
         placement: "top",
       });
-      return
+      return;
     }
 
     toast.show({
@@ -143,9 +145,7 @@ export function Profile() {
             rounded="full"
           >
             <UserPhoto
-              source={{
-                uri: userPhoto || "https://github.com/alekaimer.png",
-              }}
+              source={userPhoto ? { uri: userPhoto } : defaultUserPhoto}
               alt="Imagem do usuário"
               size={PHOTO_SIZE}
             />
@@ -182,7 +182,7 @@ export function Profile() {
             mt={4}
             placeholder="E-mail"
             bg="gray.600"
-            value="alexandre@a2softhouse.com.br"
+            value={user.email}
             isDisabled
           />
         </Center>

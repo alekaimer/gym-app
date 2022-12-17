@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   VStack,
   Image,
@@ -13,12 +13,14 @@ import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import { MainRoutesParams } from "@routes/index";
+import { useAuth } from "@hooks/useAuth";
+import { AppError } from "@utils/AppError";
+
 import BackgroundImg from "@assets/background.png";
 import LogoSvg from "@assets/logo.svg";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
-import { api } from "@services/api";
-import { MainRoutesParams } from "@routes/index";
 
 type FormDataProps = {
   email: string;
@@ -34,9 +36,11 @@ const schema = yup.object().shape({
 });
 
 export function SignIn() {
+  const { signIn } = useAuth();
+  const { navigate, reset } = useNavigation();
   const toast = useToast();
 
-  const { navigate, reset } = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
@@ -51,24 +55,20 @@ export function SignIn() {
     resolver: yupResolver(schema),
   });
 
-
-  function goToRouteAndReset(route: keyof MainRoutesParams) {
-    reset({
-      index: 0,
-      routes: [{ name: route }],
-    });
-  }
-
-  async function handleLogin({ email, password }: FormDataProps) {
+  async function handleSignIn({ email, password }: FormDataProps) {
     try {
-      await api.post("/sessions", { email, password });
-      goToRouteAndReset("HomeRoutes")
+      setIsLoading(true);
+      await signIn(email, password);
     } catch (error) {
+      setIsLoading(false);
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Erro ao fazer login. Tente novamente mais tarde";
       toast.show({
-        title: (error as any).message || "Erro ao fazer login",
-        duration: 5000,
-        placement: "top",
+        title: title,
         bgColor: "red.500",
+        placement: "top",
       });
     }
   }
@@ -132,7 +132,7 @@ export function SignIn() {
                 mt={4}
                 placeholder="Senha"
                 secureTextEntry
-                onSubmitEditing={handleSubmit(handleLogin)}
+                onSubmitEditing={handleSubmit(handleSignIn)}
                 returnKeyType="send"
                 onChangeText={onChange}
                 value={value}
@@ -141,7 +141,7 @@ export function SignIn() {
             )}
           />
 
-          <Button mt={4} title="Acessar" onPress={handleSubmit(handleLogin)} />
+          <Button mt={4} title="Acessar" onPress={handleSubmit(handleSignIn)} isLoading={isLoading} />
         </Center>
 
         <Center mt={24} justifyContent="center">

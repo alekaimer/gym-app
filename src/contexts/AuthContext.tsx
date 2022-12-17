@@ -1,39 +1,17 @@
-import React, { useMemo, createContext, useState } from "react";
+import React, { useMemo, createContext, useState, useEffect } from "react";
 import { api } from "@services/api";
-import axios, { AxiosError } from "axios";
-
-interface UserProps {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
-}
+import { UserDTO } from "@dtos/UserDTO";
+import {
+  storageUserRemove,
+  storageUserGet,
+  storageUserSave,
+} from "@storage/storageUser";
 
 export interface AuthContextProps {
-  loading: boolean;
-  user: UserProps;
-  signInApi: (email: string) => Promise<{
-    error: boolean;
-    message?: string;
-    data?: UserProps;
-  }>;
+  user: UserDTO;
+  signIn(email: string, password: string): Promise<void>;
+  signOut(): Promise<void>;
+  isLoadingUserStorage: boolean;
 }
 
 interface AuthProviderProps {
@@ -43,48 +21,58 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextProps);
 
 export function AuthContextProvider({ children }: AuthProviderProps) {
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<UserProps>({} as UserProps);
+  const [isLoadingUserStorage, setIsLoadingUserStorage] = useState(true);
+  const [user, setUser] = useState<UserDTO>({} as UserDTO);
 
-  async function signInApi(email: string) {
-    setLoading(true);
+  async function signIn(email: string, password: string) {
     try {
-      const response = await api.get("/users");
-      const foundUser = response.data.find(
-        (user: { email: string }) => user.email === email
-      );
-      if (foundUser) {
-        setUser(foundUser);
-      } else {
-        throw new Error("Usuário não encontrado");
+      const { data } = await api.post("/sessions", { email, password });
+      if (data.user) {
+        setUser(data.user);
+        storageUserSave(data.user);
       }
-      return {
-        error: false,
-        data: foundUser,
-      };
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return {
-          error: true,
-          message: error.response?.data,
-        };
-      }
-      return {
-        error: true,
-        message: (error as any as {message: string}).message,
-      };
-    } finally {
-      setLoading(false);
+      throw error;
     }
   }
 
+  async function loadUserData() {
+    try {
+      const user = await storageUserGet();
+      if (user) {
+        setUser(user);
+      }
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoadingUserStorage(false);
+    }
+  }
+
+  async function signOut() {
+    try {
+      setIsLoadingUserStorage(true);
+      setUser({} as UserDTO);
+      await storageUserRemove();
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoadingUserStorage(false);
+    }
+  }
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
   const value = useMemo(() => {
     return {
-      loading,
       user,
-      signInApi,
+      signIn,
+      signOut,
+      isLoadingUserStorage,
     };
-  }, [loading, user, signInApi]);
+  }, [user, signIn, signOut, isLoadingUserStorage]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

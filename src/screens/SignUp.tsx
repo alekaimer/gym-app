@@ -1,17 +1,26 @@
-import { VStack, Image, Center, Text, Heading, ScrollView, useToast } from "native-base";
-import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import {
+  VStack,
+  Image,
+  Center,
+  Text,
+  Heading,
+  ScrollView,
+  useToast,
+} from "native-base";
 import { useForm, Controller } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { MainRoutesParams } from "@routes/index";
+
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
+import { useAuth } from "@hooks/useAuth";
 
 import BackgroundImg from "@assets/background.png";
 import LogoSvg from "@assets/logo.svg";
-
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
-
-import { api } from "@services/api";
 
 type FormDataProps = {
   name: string;
@@ -38,9 +47,8 @@ const schema = yup.object().shape({
 
 export function SignUp() {
   const toast = useToast();
-
-  const { reset } = useNavigation();
-
+  const { navigate } = useNavigation();
+  const { signIn } = useAuth();
   const {
     control,
     handleSubmit,
@@ -56,27 +64,27 @@ export function SignUp() {
     resolver: yupResolver(schema),
   });
 
-  function goToRouteAndReset(route: keyof MainRoutesParams) {
-    reset({
-      index: 0,
-      routes: [{ name: route }],
-    });
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handleGoBack() {
+    navigate("SignIn");
   }
 
   async function handleSignUp({ email, name, password }: FormDataProps) {
     try {
-      await api.post("/users", { email, name, password });
-      toast.show({
-        title: "Conta criada com sucesso!",
-        placement: "top",
-        bgColor: "green.500",
+      setIsLoading(true);
+      await api.post("/users", {
+        name,
+        email,
+        password,
       });
-      goToRouteAndReset("SignInRoutes");
+      await signIn(email, password);
     } catch (error) {
+      setIsLoading(false);
+      const iisAppError = error instanceof AppError;
+      const title = iisAppError ? error.message : "Erro no servidor";
       toast.show({
-        title: (error as any).message || "Erro ao criar conta",
-        duration: 5000,
-        placement: "top",
+        title,
         bgColor: "red.500",
       });
     }
@@ -125,7 +133,7 @@ export function SignUp() {
                 autoCorrect={false}
                 returnKeyType="next"
                 onChangeText={onChange}
-                value={value || "Alexandre"}
+                value={value}
                 autoCapitalize="words"
                 errorMessage={errors.name?.message}
               />
@@ -145,7 +153,7 @@ export function SignUp() {
                 returnKeyLabel="next"
                 returnKeyType="next"
                 onChangeText={onChange}
-                value={value || "alexandre@email.com"}
+                value={value}
                 errorMessage={errors.email?.message}
               />
             )}
@@ -161,7 +169,7 @@ export function SignUp() {
                 secureTextEntry
                 returnKeyType="next"
                 onChangeText={onChange}
-                value={value || "123456"}
+                value={value}
                 errorMessage={errors.password?.message}
               />
             )}
@@ -176,7 +184,7 @@ export function SignUp() {
                 placeholder="Confirme sua senha"
                 secureTextEntry
                 onChangeText={onChange}
-                value={value || "123456"}
+                value={value}
                 onSubmitEditing={handleSubmit(handleSignUp)}
                 returnKeyType="send"
                 errorMessage={errors.confirmPassword?.message}
@@ -195,7 +203,7 @@ export function SignUp() {
           <Button
             title="Voltar para o login"
             variant="outline"
-            onPress={() => goToRouteAndReset("SignInRoutes")}
+            onPress={handleGoBack}
           />
         </Center>
       </VStack>
