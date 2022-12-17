@@ -19,7 +19,7 @@ export function Button({ title, variant, ...props }: ButtonProps) {
       _pressed={{ bg: variant === "outline" ? "gray.500" : "green.500" }}
       _loading={{
         _spinner: {
-          color: "black",
+          color: "white",
         },
       }}
       {...props}
