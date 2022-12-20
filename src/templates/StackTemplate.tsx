@@ -19,9 +19,10 @@ interface StackTemplateProps {
   title: string;
   children: React.ReactNode;
   goBackButtonShow?: boolean;
+  group: string;
 }
 
-export function StackTemplate({ title, children }: StackTemplateProps) {
+export function StackTemplate({ title, group, children }: StackTemplateProps) {
   const { goBack } = useNavigation();
 
   function handleGoBack() {
@@ -49,7 +50,7 @@ export function StackTemplate({ title, children }: StackTemplateProps) {
             <BodySvg />
 
             <Text color="gray.200" ml={1} textTransform="capitalize">
-              Costas
+              {group}
             </Text>
           </HStack>
         </HStack>

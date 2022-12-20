@@ -16,7 +16,7 @@ export type HomeRoutesParams = {
   Home: undefined;
   Profile: undefined;
   History: undefined;
-  Exercise: undefined;
+  Exercise: { exerciseId: string }
 };
 
 interface NavigationTabProps {

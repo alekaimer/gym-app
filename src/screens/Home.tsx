@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Heading, HStack, Text, useToast, VStack } from "native-base";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
@@ -15,19 +15,18 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [groups, setGroups] = useState<string[]>([]);
   const [exercises, setExercises] = useState<ExercisesDTO[]>([]);
-  const [activeGroup, setActiveGroup] = useState("costas");
+  const [activeGroup, setActiveGroup] = useState("antebraço");
 
   const { navigate } = useNavigation();
   const toast = useToast();
 
-  function handleOpenExerciseDetails() {
-    navigate("Exercise");
+  function handleOpenExerciseDetails(exerciseId: string) {
+    navigate("Exercise", { exerciseId });
   }
 
   async function fetchGroups() {
     try {
       setIsLoading(true);
-
       const { data } = await api.get("/groups");
       setGroups(data);
     } catch (error) {
@@ -117,7 +116,10 @@ function Home() {
             data={exercises}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <ExerciseCard data={item} onPress={handleOpenExerciseDetails} />
+              <ExerciseCard
+                data={item}
+                onPress={() => handleOpenExerciseDetails(item.id.toString())}
+              />
             )}
             showsVerticalScrollIndicator={false}
             _contentContainerStyle={{
