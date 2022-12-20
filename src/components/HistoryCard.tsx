@@ -1,9 +1,12 @@
 import React from "react";
 import { Heading, HStack, Icon, Image, Text, VStack } from "native-base";
+import { HistoryDTO } from "@dtos/HistoryDTO";
 
-type HistoryCardProps = {};
+type HistoryCardProps = {
+  data: HistoryDTO
+};
 
-export const HistoryCard = ({ ...rest }: HistoryCardProps) => {
+export const HistoryCard = ({ data, ...rest }: HistoryCardProps) => {
   return (
     <HStack
       bgColor="gray.600"
@@ -20,15 +23,15 @@ export const HistoryCard = ({ ...rest }: HistoryCardProps) => {
           textTransform="capitalize"
           numberOfLines={1}
         >
-          Costas
+          {data.group}
         </Heading>
 
         <Text color="gray.200" fontSize="lg" numberOfLines={1}>
-          Puxada frontal
+          {data.name}
         </Text>
       </VStack>
 
-      <Text color="gray.300">08:56</Text>
+      <Text color="gray.300">{data.hour}</Text>
     </HStack>
   );
 };
