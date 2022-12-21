@@ -136,14 +136,10 @@ export function Profile() {
           placement: "top",
         });
 
-        console.log(user)
-
         await updateUserProfile({
           ...user,
           avatar: avatarUpdatedResponse.data.avatar,
         });
-
-        console.log(avatarUpdatedResponse.data);
       }
     } catch (error) {
       toast.show({
