@@ -21,11 +21,14 @@ import { UserPhoto } from "@components/UserPhoto";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import { useAuth } from "@hooks/useAuth";
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
 
 const PHOTO_SIZE = 33;
 
 type FormDataProps = {
   name: string;
+  email: string;
   oldPassword: string;
   password: string;
   confirmPassword: string;
@@ -35,20 +38,32 @@ const schema = yup.object().shape({
   name: yup.string().required("Nome é obrigatório"),
   oldPassword: yup
     .string()
-    .required("E-mail é obrigatório")
-    .min(6, "Senha precisa ter no mínimo 6 caracteres"),
+    .nullable()
+    .min(3, "Senha precisa ter no mínimo 6 caracteres")
+    .transform((value) => (value === "" ? null : value)),
   password: yup
     .string()
-    .required("Senha é obrigatória")
-    .min(6, "Senha precisa ter no mínimo 6 caracteres"),
+    .min(6, "Senha precisa ter no mínimo 6 caracteres")
+    .nullable()
+    .transform((value) => (value === "" ? null : value)),
   confirmPassword: yup
     .string()
-    .required("Confirmar a senha é obrigatório")
-    .oneOf([yup.ref("password"), null], "Senhas não conferem"),
+    .nullable()
+    .transform((value) => (value === "" ? null : value))
+    .oneOf([yup.ref("password"), null], "Senhas não conferem")
+    .when("password", {
+      is: (val: any) => val,
+      then: yup
+        .string()
+        .nullable()
+        .required("Informe a confirmação de senha")
+        .transform((value) => (value === "" ? null : value)),
+    }),
 });
 
 export function Profile() {
   const toast = useToast();
+  const { user, updateUserProfile } = useAuth();
   const {
     control,
     handleSubmit,
@@ -56,15 +71,13 @@ export function Profile() {
   } = useForm<FormDataProps>({
     // optional default values
     defaultValues: {
-      name: "",
-      oldPassword: "",
-      password: "",
-      confirmPassword: "",
+      name: user.name,
+      email: user.email,
     },
     resolver: yupResolver(schema),
   });
-  const { user } = useAuth();
 
+  const [isUpdating, setIsUpdating] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
 
@@ -111,25 +124,34 @@ export function Profile() {
     }
   }
 
-  function handleProfileUpdate(data: FormDataProps) {
-    console.log(data);
-
-    if (false) {
-      //para erro
-
+  async function handleProfileUpdate(data: FormDataProps) {
+    try {
+      setIsUpdating(true);
+      await api.put("/users", {
+        name: data.name,
+        old_password: data.oldPassword,
+        password: data.password,
+      });
+      await updateUserProfile({
+        ...user,
+        name: data.name,
+      });
       toast.show({
-        title: "Erro na atualização do perfil!",
+        title: "Perfil atualilzado com sucesso!",
+        bgColor: "green.700",
+        placement: "top",
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : "Não foi possível atualizar os dados. Tente novamente mais tarde.";
+      toast.show({
+        title,
         bgColor: "red.500",
         placement: "top",
       });
-      return;
+    } finally {
+      setIsUpdating(false);
     }
-
-    toast.show({
-      title: "Perfil atualizado!",
-      bgColor: "green.500",
-      placement: "top",
-    });
   }
 
   return (
@@ -178,12 +200,18 @@ export function Profile() {
             )}
           />
 
-          <Input
-            mt={4}
-            placeholder="E-mail"
-            bg="gray.600"
-            value={user.email}
-            isDisabled
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                mt={4}
+                placeholder="E-mail"
+                bg="gray.600"
+                value={user.email}
+                isDisabled
+              />
+            )}
           />
         </Center>
 
@@ -195,13 +223,12 @@ export function Profile() {
           <Controller
             control={control}
             name="oldPassword"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange } }) => (
               <Input
                 placeholder="Senha atual"
                 bg="gray.600"
                 secureTextEntry
                 onChangeText={onChange}
-                value={value}
                 errorMessage={errors.oldPassword?.message}
               />
             )}
@@ -210,14 +237,13 @@ export function Profile() {
           <Controller
             control={control}
             name="password"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange } }) => (
               <Input
                 placeholder="Nova senha"
                 bg="gray.600"
                 mt={4}
                 secureTextEntry
                 onChangeText={onChange}
-                value={value}
                 errorMessage={errors.password?.message}
               />
             )}
@@ -226,14 +252,13 @@ export function Profile() {
           <Controller
             control={control}
             name="confirmPassword"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange } }) => (
               <Input
                 placeholder="Confirme sua nova senha"
                 bg="gray.600"
                 mt={4}
                 secureTextEntry
                 onChangeText={onChange}
-                value={value}
                 errorMessage={errors.confirmPassword?.message}
               />
             )}
@@ -243,6 +268,7 @@ export function Profile() {
             title="Atualizar"
             mt={8}
             onPress={handleSubmit(handleProfileUpdate)}
+            isLoading={isUpdating}
           />
         </VStack>
       </ScrollView>

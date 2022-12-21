@@ -17,6 +17,7 @@ export interface AuthContextProps {
   signIn(email: string, password: string): Promise<void>;
   signOut(): Promise<void>;
   isLoadingUserStorage: boolean;
+  updateUserProfile: (userUpdated: UserDTO) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -51,7 +52,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     try {
       const { data } = await api.post("/sessions", { email, password });
       if (data.user && data.token) {
-        await storageUserAndTokenSave(data.user, data.token)
+        await storageUserAndTokenSave(data.user, data.token);
 
         userAndTokenUpdate(data.user, data.token);
       }
@@ -93,6 +94,15 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function updateUserProfile(userUpdated: UserDTO) {
+    try {
+      setUser(userUpdated);
+      await storageUserSave(userUpdated);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   useEffect(() => {
     loadUserData();
   }, []);
@@ -103,8 +113,9 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       signIn,
       signOut,
       isLoadingUserStorage,
+      updateUserProfile,
     };
-  }, [user, signIn, signOut, isLoadingUserStorage]);
+  }, [user, signIn, signOut, isLoadingUserStorage, updateUserProfile]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
