@@ -25,6 +25,7 @@ import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
 
 const PHOTO_SIZE = 33;
+const MAX_UPLOADED_FILE_SIZE = 5;
 
 type FormDataProps = {
   name: string;
@@ -86,31 +87,56 @@ export function Profile() {
     try {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      const result = await ImagePicker.launchImageLibraryAsync({
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
         aspect: [4, 4],
         allowsEditing: true,
       });
 
-      if (result.cancelled) {
+      if (photoSelected.cancelled) {
         return;
       }
 
-      if (result.uri) {
-        const photoInfo = await FileSystem.getInfoAsync(result.uri);
+      if (photoSelected.uri) {
+        const photoInfo = await FileSystem.getInfoAsync(photoSelected.uri);
 
-        if (photoInfo.size && photoInfo.size > 1024 * (1024 * 5)) {
+        if (
+          photoInfo.size &&
+          photoInfo.size > 1024 * (1024 * MAX_UPLOADED_FILE_SIZE)
+        ) {
           toast.show({
-            title: "A imagem deve ter no máximo 5MB.",
+            title: `A imagem deve ter no máximo ${MAX_UPLOADED_FILE_SIZE}MB.`,
             bgColor: "red.500",
             placement: "top",
           });
-          // Alert.alert("A imagem deve ter no máximo 5MB.");
           return;
         }
 
-        setUserPhoto(result.uri);
+        // setUserPhoto(photoSelected.uri);
+        const fileExtension = photoSelected.uri.split(".").pop();
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`,
+          type: `${photoSelected.type}/${fileExtension}`,
+          uri: photoSelected.uri,
+        } as any;
+
+        console.log(photoFile);
+
+        const userFormUploadedPhoto = new FormData();
+        userFormUploadedPhoto.append("avatar", photoFile);
+
+        await api.patch("/users/avatar", userFormUploadedPhoto, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        toast.show({
+          title: "Foto atualizada com sucesso!",
+          bgColor: "green.700",
+          placement: "top",
+        });
       }
     } catch (error) {
       toast.show({
@@ -118,7 +144,6 @@ export function Profile() {
         bgColor: "red.500",
         placement: "top",
       });
-      // Alert.alert("Não foi possível acessar a galeria de fotos.");
     } finally {
       setPhotoIsLoading(false);
     }
@@ -143,7 +168,9 @@ export function Profile() {
       });
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError ? error.message : "Não foi possível atualizar os dados. Tente novamente mais tarde.";
+      const title = isAppError
+        ? error.message
+        : "Não foi possível atualizar os dados. Tente novamente mais tarde.";
       toast.show({
         title,
         bgColor: "red.500",
