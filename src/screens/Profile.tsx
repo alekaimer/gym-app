@@ -116,17 +116,15 @@ export function Profile() {
         // setUserPhoto(photoSelected.uri);
         const fileExtension = photoSelected.uri.split(".").pop();
         const photoFile = {
-          name: `${user.name}.${fileExtension}`,
+          name: `${(user.name).replace(/ /, '')}.${fileExtension}`,
           type: `${photoSelected.type}/${fileExtension}`,
           uri: photoSelected.uri,
         } as any;
 
-        console.log(photoFile);
-
         const userFormUploadedPhoto = new FormData();
         userFormUploadedPhoto.append("avatar", photoFile);
 
-        await api.patch("/users/avatar", userFormUploadedPhoto, {
+        const avatarUpdatedResponse = await api.patch("/users/avatar", userFormUploadedPhoto, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -137,6 +135,15 @@ export function Profile() {
           bgColor: "green.700",
           placement: "top",
         });
+
+        console.log(user)
+
+        await updateUserProfile({
+          ...user,
+          avatar: avatarUpdatedResponse.data.avatar,
+        });
+
+        console.log(avatarUpdatedResponse.data);
       }
     } catch (error) {
       toast.show({
@@ -194,7 +201,7 @@ export function Profile() {
             rounded="full"
           >
             <UserPhoto
-              source={userPhoto ? { uri: userPhoto } : defaultUserPhoto}
+              source={user.avatar ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } : defaultUserPhoto}
               alt="Imagem do usuário"
               size={PHOTO_SIZE}
             />
