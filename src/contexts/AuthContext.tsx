@@ -107,6 +107,18 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     loadUserData();
   }, []);
 
+  // registra a função signOut para ser executada no api service
+  // registerInterceptTokenManager is a function that intercepts the response of the api and checks if the token is valid
+  useEffect(() => {
+    const subscribe = api.registerInterceptTokenManager(signOut);
+
+    // memory cleaner
+    // unsubscribe to the listener when unmounting.
+    return () => {
+      subscribe();
+    };
+  }, [signOut]);
+
   const value = useMemo(() => {
     return {
       user,
