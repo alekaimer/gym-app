@@ -33,7 +33,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.alekaimer.evolutionsellercenterapp"
+      "package": "com.projectowner.projectname"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -43,6 +43,6 @@
         "projectId": "41e883f0-4ead-471c-bbe8-dda5a7a6efb6"
       }
     },
-    "owner": "alekaimer"
+    "owner": "projectowner"
   }
 }
